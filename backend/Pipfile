@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+torch = "*"
+pillow = "*"
+python-multipart = "*"
+aiofiles = "*"
+uvicorn = "*"
+fastapi-cors = "*"
+numpy = "*"
+pandas = "*"
+deepface = "*"
+tf-keras = "*"
+ultralytics = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"
