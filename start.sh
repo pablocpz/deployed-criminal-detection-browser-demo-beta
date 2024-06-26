@@ -1,6 +1,6 @@
 #!/bin/bash
 #wil need to first start venv
-source venv/bin/activate
+# source venv/bin/activate
 
 
 #WILL WORK AT THE SAME CHILD DIRECTORY OF VENV (inside VIM)
@@ -12,4 +12,4 @@ cd "$(dirname "$0")"
 cd deployed-criminal-detection-browser-demo-beta/backend/sam_server
 
 
-uvicorn app:app --host=0.0.0.0 --workers=4
+uvicorn app:app --host=0.0.0.0 --port=8000 --workers=1
