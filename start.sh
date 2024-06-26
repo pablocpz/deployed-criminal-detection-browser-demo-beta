@@ -1,7 +1,9 @@
 #!/bin/bash
 #wil need to first start venv
-# source venv/bin/activate
+source venv/bin/activate
 
+
+#WILL WORK AT THE SAME CHILD DIRECTORY OF VENV (inside VIM)
 #get current directory
 cd "$(dirname "$0")"
 
