@@ -29,7 +29,7 @@ from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles  # Import StaticFiles
-from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
+# from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 
 # import torch
@@ -52,7 +52,7 @@ import pandas as pd
 
 app = FastAPI()
 
-app.add_middleware(HTTPSRedirectMiddleware)
+# app.add_middleware(HTTPSRedirectMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
