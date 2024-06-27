@@ -5,6 +5,8 @@ This is the main file for the SAM model hosting server.
 import os
 import sys
 import logging
+import ssl
+
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -51,6 +53,9 @@ import pandas as pd
 #     sys.exit(1)
 
 app = FastAPI()
+
+ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+ssl_context.load_cert_chain('cert.pem', keyfile='key.pem')
 
 # app.add_middleware(HTTPSRedirectMiddleware)
 
@@ -413,4 +418,5 @@ async def root():
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000,
+                 ssl=ssl_context)
