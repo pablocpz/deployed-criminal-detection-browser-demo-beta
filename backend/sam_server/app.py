@@ -54,8 +54,8 @@ import pandas as pd
 
 app = FastAPI()
 
-ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-ssl_context.load_cert_chain('cert.pem', keyfile='key.pem')
+# ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+# ssl_context.load_cert_chain('cert.pem', keyfile='key.pem')
 
 # app.add_middleware(HTTPSRedirectMiddleware)
 
@@ -414,4 +414,5 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=8000,
-                 ssl=ssl_context)
+                )
+    #  ssl=ssl_context
