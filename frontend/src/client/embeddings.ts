@@ -1,4 +1,3 @@
-import axios from "axios";
 import { API_BASE_URL } from "@/config";
 
 // const THRESHOLD_1 = 0.8; // Threshold for similarity acceptance
@@ -43,42 +42,36 @@ export async function getRecognitionsFromAPI(
 
   formData.append("file", blob, "image.jpg");
 
-  try {
-    const axiosResponse = await axios.post(
-      `${API_BASE_URL}/process-image/`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        params: {
-          confidence_threshold: confidence_threshold,
-        },
-        withCredentials: true,
-        onUploadProgress: (progressEvent) => {
-          if (progressEvent.total) {
-            const progress = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total,
-            );
-            setProgress(progress);
-          }
-        },
-      },
-    );
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `${API_BASE_URL}/process-image/`);
+    xhr.setRequestHeader("Content-Type", "multipart/form-data");
 
-    const recognitionResults = axiosResponse.data.recognition;
-    const recognitionSimilarities = axiosResponse.data.similarities;
-    console.log("Recognition inference done from API");
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const progress = Math.round((event.loaded * 100) / event.total);
+        setProgress(progress);
+      }
+    };
 
-    return { recognitionResults, recognitionSimilarities };
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      console.error("Error in getRecognitionsFromAPI:", error.response.data);
-    } else {
-      console.error("Error in getRecognitionsFromAPI:", error);
-    }
-    throw error;
-  }
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        resolve({
+          recognitionResults: response.recognition,
+          recognitionSimilarities: response.similarities,
+        });
+      } else {
+        reject(new Error(`HTTP error! status: ${xhr.status}`));
+      }
+    };
+
+    xhr.onerror = () => {
+      reject(new Error("Network error occurred"));
+    };
+
+    xhr.send(formData);
+  });
 }
 
 // /**

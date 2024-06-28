@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Criminal from "@/types/criminal";
 import "./CriminalsGrid.css";
 import { API_BASE_URL } from "@/config";
-import axios from 'axios';
 
 const CriminalsGrid = () => {
   const [criminals, setCriminals] = useState<Criminal[]>([]);
@@ -11,52 +10,28 @@ const CriminalsGrid = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCriminals = async () => {
-      try {
-        console.log("Fetching criminals from:", `${API_BASE_URL}/list-criminals/`);
-        const response = await fetch(`${API_BASE_URL}/list-criminals/`, {
-          mode: 'cors',
-          credentials: 'include'
+    fetch(`${API_BASE_URL}/list-criminals/`)
+      .then(response => response.json())
+      .then(data => {
+        const criminalsWithImages = data.map(async (criminal: Criminal) => {
+          const images = await fetchCriminalImages(criminal.name);
+          return { ...criminal, images };
         });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log("Fetched criminals:", data);
-        const criminalsWithImages = await Promise.all(
-          data.map(async (criminal: Criminal) => {
-            const images = await fetchCriminalImages(criminal.name);
-            return { ...criminal, images };
-          })
-        );
-        setCriminals(criminalsWithImages);
-      } catch (error) {
-        console.error("Error fetching criminals:", error);
-        setError("Error fetching criminals");
-      }
-    };
-
-    fetchCriminals();
+        Promise.all(criminalsWithImages).then(setCriminals);
+      })
+      .catch(error => {
+        console.error('Error fetching criminals:', error);
+        setError('Error fetching criminals');
+      });
   }, []);
 
   const fetchCriminalImages = async (criminalName: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/criminal-images/${criminalName}`, {
-        mode: 'cors',
-        credentials: 'include'
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      const response = await fetch(`${API_BASE_URL}/criminal-images/${criminalName}`);
       const data = await response.json();
-      if (data.images) {
-        return data.images;
-      } else {
-        console.error("Failed to load images for", criminalName);
-        return [];
-      }
+      return data.images || [];
     } catch (error) {
-      console.error("Error fetching images for", criminalName, ":", error);
+      console.error('Error fetching images for', criminalName, ':', error);
       return [];
     }
   };

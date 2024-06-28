@@ -12,13 +12,10 @@ const EditCriminal = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadCriminals = async () => {
-      const response = await fetch(`${API_BASE_URL}/list-criminals/`);
-      const data = await response.json();
-      setCriminals(data);
-    };
-
-    loadCriminals();
+    fetch(`${API_BASE_URL}/list-criminals/`)
+      .then(response => response.json())
+      .then(data => setCriminals(data))
+      .catch(error => console.error('Error fetching criminals:', error));
   }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

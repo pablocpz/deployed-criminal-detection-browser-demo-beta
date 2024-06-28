@@ -27,31 +27,19 @@ const Home = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        console.log("Fetching images from:", `${API_BASE_URL}/get-images/`);
-        const response = await fetch(`${API_BASE_URL}/get-images/`, {
-          mode: "cors",
-          credentials: "include",
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+    fetch(`${API_BASE_URL}/get-images/`)
+      .then(response => response.json())
+      .then(data => {
         if (data.images) {
           setImages(data.images);
         } else {
-          setError("Failed to load images");
+          setError('Failed to load images');
         }
-      } catch (error) {
-        console.error("Error fetching images:", error);
-        setError(
-          `Error fetching images: ${error instanceof Error ? error.message : String(error)}`,
-        );
-      }
-    };
-
-    fetchImages();
+      })
+      .catch(error => {
+        console.error('Error fetching images:', error);
+        setError(`Error fetching images: ${error instanceof Error ? error.message : String(error)}`);
+      });
   }, []);
 
   useEffect(() => {

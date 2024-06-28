@@ -6,13 +6,7 @@ import DetectedCriminal from "@/types/detectedCriminal";
 
 async function loadCriminalImages(criminalName: string) {
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/criminal-images/${criminalName}`,
-      {
-        mode: "cors",
-        credentials: "include",
-      },
-    );
+    const response = await fetch(`${API_BASE_URL}/criminal-images/${criminalName}`);
     const data = await response.json();
     if (data.images) {
       console.log(`Images for ${criminalName}:`, data.images);

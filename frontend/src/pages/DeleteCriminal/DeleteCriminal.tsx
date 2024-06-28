@@ -11,17 +11,10 @@ const DeleteCriminal = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCriminals = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/list-criminals/`);
-        const data = await response.json();
-        setCriminals(data);
-      } catch (error) {
-        console.error("Error fetching criminals:", error);
-      }
-    };
-
-    fetchCriminals();
+    fetch(`${API_BASE_URL}/list-criminals/`)
+      .then(response => response.json())
+      .then(data => setCriminals(data))
+      .catch(error => console.error('Error fetching criminals:', error));
   }, []);
 
   const handleDelete = async (criminalName: string) => {
