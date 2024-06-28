@@ -61,7 +61,11 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://deployed-criminal-detection-v5.vercel.app"],
+    allow_origins=[
+        "https://deployed-criminal-detection-v5.vercel.app",
+        "https://vercel.com/neuralroots-projects/deployed-criminal-detection-v5/G1cBHDGrYyHuF26oQFMroJNeUUCf",
+        "https://browser-demo-beta.xyz",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
