@@ -50,7 +50,7 @@ const Home = () => {
   useEffect(() => {
     console.log("Fetching criminals...");
     fetch(`${API_BASE_URL}/list-criminals/`, {
-      credentials: 'include'
+      // credentials: 'include'
     })
       .then(response => {
         console.log("Criminals response received:", response.status);
