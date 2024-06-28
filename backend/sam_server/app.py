@@ -61,10 +61,7 @@ ssl_context.load_cert_chain('cert.pem', keyfile='key.pem')
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://deployed-criminal-detection-v5.vercel.app",
-                   "https://deployed-criminal-detection-v5-4nzspbduz-neuralroots-projects.vercel.app",
-                   "https://browser-demo-beta.xyz",
-                   "http://localhost:5173"],
+    allow_origins=["https://deployed-criminal-detection-v5.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
