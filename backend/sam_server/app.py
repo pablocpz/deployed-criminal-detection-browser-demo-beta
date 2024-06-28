@@ -61,8 +61,8 @@ ssl_context.load_cert_chain('cert.pem', keyfile='key.pem')
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://deployed-criminal-detection-v5.vercel.app/",
-                   "https://vercel.com/neuralroots-projects/deployed-criminal-detection-v5/3nNvkPzzjPQqCJJZ5Fmmz2VXoP56",
+    allow_origins=["https://deployed-criminal-detection-v5.vercel.app/"
+                   "https://deployed-criminal-detection-v5-8b2gzsk78-neuralroots-projects.vercel.app/",
                    "http://localhost:5173"],
     # "https://browser-ai-demo.vercel.app",
     #                "https://browser-ai-demo-c9bevc48dh7c.code.run",
@@ -72,7 +72,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-API_BASE_URL = os.environ.get("API_BASE_URL", "https://52.73.112.42:8000/")
+API_BASE_URL = os.environ.get("API_BASE_URL", "https://browser-demo-beta.xyz")
 
 CRIMINAL_DATA_DIR = os.path.join(backend_dir, "criminal_data")
 SAMPLE_IMAGES_DIR = os.path.join(backend_dir, "sample_images")
