@@ -13,25 +13,23 @@ const CriminalsGrid = () => {
   useEffect(() => {
     const fetchCriminals = async () => {
       try {
-        console.log("trying to load grid...");
-        const response = await axios.get(`${API_BASE_URL}/list-criminals/`, {
-          withCredentials: true,
+        console.log("Fetching criminals from:", `${API_BASE_URL}/list-criminals/`);
+        const response = await fetch(`${API_BASE_URL}/list-criminals/`, {
+          mode: 'cors',
+          credentials: 'include'
         });
-        const data = response.data;
-
-        console.log("done");
-        if (data) {
-          console.log("Fetched criminals:", data);
-          const criminalsWithImages = await Promise.all(
-            data.map(async (criminal: Criminal) => {
-              const images = await fetchCriminalImages(criminal.name);
-              return { ...criminal, images };
-            }),
-          );
-          setCriminals(criminalsWithImages);
-        } else {
-          setError("Failed to load criminals");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+        const data = await response.json();
+        console.log("Fetched criminals:", data);
+        const criminalsWithImages = await Promise.all(
+          data.map(async (criminal: Criminal) => {
+            const images = await fetchCriminalImages(criminal.name);
+            return { ...criminal, images };
+          })
+        );
+        setCriminals(criminalsWithImages);
       } catch (error) {
         console.error("Error fetching criminals:", error);
         setError("Error fetching criminals");
@@ -43,10 +41,14 @@ const CriminalsGrid = () => {
 
   const fetchCriminalImages = async (criminalName: string) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/criminal-images/${criminalName}`, {
-        withCredentials: true,
+      const response = await fetch(`${API_BASE_URL}/criminal-images/${criminalName}`, {
+        mode: 'cors',
+        credentials: 'include'
       });
-      const data = response.data;
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
       if (data.images) {
         return data.images;
       } else {
