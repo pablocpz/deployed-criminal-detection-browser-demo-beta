@@ -27,9 +27,14 @@ const Home = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log("Fetching images...");
     fetch(`${API_BASE_URL}/get-images/`)
-      .then(response => response.json())
+      .then(response => {
+        console.log("Images response received:", response.status);
+        return response.json();
+      })
       .then(data => {
+        console.log("Images data received:", data);
         if (data.images) {
           setImages(data.images);
         } else {
@@ -43,26 +48,22 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const loadCriminals = async () => {
-      try {
-        console.log(
-          "Fetching criminals from:",
-          `${API_BASE_URL}/list-criminals/`,
-        );
-        const response = await axios.get(`${API_BASE_URL}/list-criminals/`, {
-          withCredentials: true,
-        });
-        console.log("Loaded criminals:", response.data);
-        setCriminals(response.data);
-      } catch (error) {
+    console.log("Fetching criminals...");
+    fetch(`${API_BASE_URL}/list-criminals/`, {
+      credentials: 'include'
+    })
+      .then(response => {
+        console.log("Criminals response received:", response.status);
+        return response.json();
+      })
+      .then(data => {
+        console.log("Criminals data received:", data);
+        setCriminals(data);
+      })
+      .catch(error => {
         console.error("Error loading criminals:", error);
-        setError(
-          `Error loading criminals: ${error instanceof Error ? error.message : String(error)}`,
-        );
-      }
-    };
-
-    loadCriminals();
+        setError(`Error loading criminals: ${error instanceof Error ? error.message : String(error)}`);
+      });
   }, []);
 
   useEffect(() => {
