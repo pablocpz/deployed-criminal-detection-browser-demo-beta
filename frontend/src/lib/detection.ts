@@ -18,7 +18,7 @@ async function loadCriminalImages(criminalName: string) {
       console.log(`Images for ${criminalName}:`, data.images);
       return data.images;
     } else {
-      console.log(`No images found for ${criminalName}.`);
+      console.error(`No images found for ${criminalName}.`);
       return [];
     }
   } catch (error) {

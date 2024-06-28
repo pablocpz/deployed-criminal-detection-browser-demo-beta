@@ -54,6 +54,7 @@ export async function getRecognitionsFromAPI(
         params: {
           confidence_threshold: confidence_threshold,
         },
+        withCredentials: true,
         onUploadProgress: (progressEvent) => {
           if (progressEvent.total) {
             const progress = Math.round(
