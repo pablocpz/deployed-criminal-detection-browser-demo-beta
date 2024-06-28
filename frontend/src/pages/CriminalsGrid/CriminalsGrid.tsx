@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Criminal from "@/types/criminal";
 import "./CriminalsGrid.css";
 import { API_BASE_URL } from "@/config";
+import axios from 'axios';
 
 const CriminalsGrid = () => {
   const [criminals, setCriminals] = useState<Criminal[]>([]);
@@ -13,11 +14,10 @@ const CriminalsGrid = () => {
     const fetchCriminals = async () => {
       try {
         console.log("trying to load grid...");
-        const response = await fetch(`${API_BASE_URL}/list-criminals/`, {
-          mode: "cors",
-          credentials: "include",
+        const response = await axios.get(`${API_BASE_URL}/list-criminals/`, {
+          withCredentials: true,
         });
-        const data = await response.json();
+        const data = response.data;
 
         console.log("done");
         if (data) {
@@ -43,14 +43,10 @@ const CriminalsGrid = () => {
 
   const fetchCriminalImages = async (criminalName: string) => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/criminal-images/${criminalName}`,
-        {
-          mode: "cors",
-          credentials: "include",
-        },
-      );
-      const data = await response.json();
+      const response = await axios.get(`${API_BASE_URL}/criminal-images/${criminalName}`, {
+        withCredentials: true,
+      });
+      const data = response.data;
       if (data.images) {
         return data.images;
       } else {
