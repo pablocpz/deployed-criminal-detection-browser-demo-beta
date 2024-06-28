@@ -16,6 +16,9 @@ const CriminalsGrid = () => {
         console.log("trying to load grid...");
         const response = await axios.get(`${API_BASE_URL}/list-criminals/`, {
           withCredentials: true,
+          headers: {
+            'Access-Control-Allow-Origin': 'https://browser-demo-beta.xyz',
+          },
         });
         const data = response.data;
 
@@ -45,6 +48,9 @@ const CriminalsGrid = () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/criminal-images/${criminalName}`, {
         withCredentials: true,
+        headers: {
+          'Access-Control-Allow-Origin': 'https://browser-demo-beta.xyz',
+        },
       });
       const data = response.data;
       if (data.images) {
