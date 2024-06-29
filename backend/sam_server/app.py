@@ -138,19 +138,15 @@ async def process_image(
             (
                 DeepFace.find(
                     img_path=detected_faces[idx],
-                    db_path="../../criminal_data",
-                    enforce_detection=False,  # si no hay cara, no se verifica,
-                    # distance_metric="euclidean_l2",
-                    distance_metric="cosine",  # both are good with VGG-Face
-                    align=False,  # slightly better performance with False
-                    model_name="VGG-Face",  # "FaceNet-512"
-                    # model_name=
+                    db_path=CRIMINAL_DATA_DIR,  # Use the CRIMINAL_DATA_DIR constant
+                    enforce_detection=False,
+                    distance_metric="cosine",
+                    align=False,
+                    model_name="VGG-Face",
                 )
                 if len(detected_faces) > 0
                 else []
             )
-            # obtenemos el primer elemento de la lista que devuelve find()
-            # ya que lo hace para cada cara, y nosotros solo entregamos de 1 en 1
             for idx in range(0, len(detected_faces))
         ]
 
