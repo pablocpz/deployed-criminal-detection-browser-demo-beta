@@ -137,6 +137,7 @@ const Home = () => {
             error
           );
           setError(`Error processing image: ${error instanceof Error ? error.message : String(error)}`);
+          setLoading(false);
         }
       };
 

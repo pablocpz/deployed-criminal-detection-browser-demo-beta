@@ -113,6 +113,11 @@ async def process_image(
         print("converted")
         print(x.shape)
 
+        required_file = '/var/www/deployed-criminal-detection-browser-demo-beta/backend/criminal_data/ds_model_vggface_detector_opencv_unaligned_normalization_base_expand_0.pkl'
+        if not os.path.exists(required_file):
+            logger.error(f"Required file not found: {required_file}")
+            return JSONResponse(content={"error": f"Required file not found: {required_file}"}, status_code=500)
+
         logger.info("Extracting faces from the input image")
         face_objs = DeepFace.extract_faces(
             img_path=x,
