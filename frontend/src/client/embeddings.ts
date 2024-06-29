@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "@/config";
+import axios from 'axios';
 
 // const THRESHOLD_1 = 0.8; // Threshold for similarity acceptance
 
@@ -13,18 +14,15 @@ export async function getRecognitionsFromAPI(
   recognitionResults: string[];
   recognitionSimilarities: number[];
 }> {
-  const formData = new FormData();
   const canvas = document.createElement("canvas");
   canvas.width = imageData.width;
   canvas.height = imageData.height;
   const ctx = canvas.getContext("2d");
 
-  console.log("inside getEmbeddingsFromAPI()");
   if (!ctx) {
     throw new Error("Failed to get 2D context");
   }
   ctx.putImageData(imageData, 0, 0);
-  console.log("ImageData put on canvas");
 
   const blob = await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => {
@@ -36,42 +34,34 @@ export async function getRecognitionsFromAPI(
     }, "image/jpeg");
   });
 
-  if (!blob) {
-    throw new Error("Failed to create Blob from ImageData");
-  }
-
+  const formData = new FormData();
   formData.append("file", blob, "image.jpg");
+  formData.append("confidence_threshold", confidence_threshold.toString());
 
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", `${API_BASE_URL}/process-image/`);
-    xhr.setRequestHeader("Content-Type", "multipart/form-data");
+  try {
+    const response = await axios.post(`${API_BASE_URL}/process-image/`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      onUploadProgress: (progressEvent) => {
+        if (progressEvent.total) {
+          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(progress);
+        }
+      },
+    });
 
-    xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable) {
-        const progress = Math.round((event.loaded * 100) / event.total);
-        setProgress(progress);
-      }
+    return {
+      recognitionResults: response.data.recognition,
+      recognitionSimilarities: response.data.similarities,
     };
-
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        resolve({
-          recognitionResults: response.recognition,
-          recognitionSimilarities: response.similarities,
-        });
-      } else {
-        reject(new Error(`HTTP error! status: ${xhr.status}`));
-      }
-    };
-
-    xhr.onerror = () => {
-      reject(new Error("Network error occurred"));
-    };
-
-    xhr.send(formData);
-  });
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Axios error:', error.response?.data || error.message);
+      throw new Error(`HTTP error! status: ${error.response?.status}`);
+    } else {
+      console.error('Unexpected error:', error);
+      throw new Error('An unexpected error occurred');
+    }
+  }
 }
 
 // /**

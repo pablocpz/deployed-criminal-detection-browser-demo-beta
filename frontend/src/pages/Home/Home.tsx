@@ -134,16 +134,19 @@ const Home = () => {
         } catch (error) {
           console.error(
             "Error converting image to ImageData or detecting criminals:",
-            error,
+            error
           );
+          setError(`Error processing image: ${error instanceof Error ? error.message : String(error)}`);
         }
       };
 
       img.onerror = (error) => {
         console.error("Error loading image:", error);
+        setError("Error loading image");
       };
     } catch (error) {
       console.error("Error selecting image:", error);
+      setError(`Error selecting image: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setLoading(false);
     }
