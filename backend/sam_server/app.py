@@ -105,20 +105,22 @@ async def process_image(
     try:
         logger.info("Starting image processing")
         image = Image.open(io.BytesIO(await file.read())).convert("RGB")
-
         logger.info("Image received and converted to RGB")
-        logger.info(f"Image shape: {x.shape}")
+
         # Convert the image to a numpy array
         x = np.array(image)
+        logger.info(f"Image shape: {x.shape}")
         print("converted")
         print(x.shape)
-        face_objs = DeepFace.extract_faces(  # extracting faces from the input image
+
+        logger.info("Extracting faces from the input image")
+        face_objs = DeepFace.extract_faces(
             img_path=x,
-            detector_backend="yolov8",  # "retinaface",
+            detector_backend="yolov8",
             enforce_detection=True,
         )
+        logger.info(f"Extracted {len(face_objs)} faces")
 
-        logger.info(f"Faces extracted: {len(face_objs)}")
         print("this", face_objs)
         # returns a list of dictionaries, each one with face pixels, confidence, width. height...etc
 
