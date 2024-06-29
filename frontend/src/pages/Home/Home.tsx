@@ -188,6 +188,7 @@ const Home = () => {
   };
 
   return (
+    
     <div className="w-full flex flex-col items-center">
       <div className="w-full max-w-6xl space-y-8">
         <p className="text-lg text-center">
