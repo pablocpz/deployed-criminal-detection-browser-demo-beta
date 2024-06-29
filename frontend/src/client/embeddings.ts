@@ -47,6 +47,7 @@ export async function getRecognitionsFromAPI(
           setProgress(progress);
         }
       },
+      timeout: 300000, // 5 minutes timeout
     });
 
     return {
@@ -56,10 +57,14 @@ export async function getRecognitionsFromAPI(
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('Axios error:', error.response?.data || error.message);
-      throw new Error(`HTTP error! status: ${error.response?.status}`);
+      if (error.response?.status === 502) {
+        throw new Error("The server is currently busy. Please try again in a few moments.");
+      } else {
+        throw new Error(`Server error: ${error.response?.status}. Please try again later.`);
+      }
     } else {
       console.error('Unexpected error:', error);
-      throw new Error('An unexpected error occurred');
+      throw new Error('An unexpected error occurred. Please try again.');
     }
   }
 }
