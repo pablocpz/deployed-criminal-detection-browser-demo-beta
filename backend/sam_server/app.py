@@ -103,9 +103,11 @@ async def process_image(
         JSONResponse: A JSON response containing the embeddings of the image or an error message.
     """
     try:
+        logger.info("Starting image processing")
         image = Image.open(io.BytesIO(await file.read())).convert("RGB")
 
-        print("received")
+        logger.info("Image received and converted to RGB")
+        logger.info(f"Image shape: {x.shape}")
         # Convert the image to a numpy array
         x = np.array(image)
         print("converted")
@@ -116,6 +118,7 @@ async def process_image(
             enforce_detection=True,
         )
 
+        logger.info(f"Faces extracted: {len(face_objs)}")
         print("this", face_objs)
         # returns a list of dictionaries, each one with face pixels, confidence, width. height...etc
 
@@ -149,6 +152,7 @@ async def process_image(
             for idx in range(0, len(detected_faces))
         ]
 
+        logger.info(f"Recognition results: {len(recognition_results)}")
         # the less distance, the more likely they are to be the same face
 
         empty_table = pd.DataFrame(
@@ -208,6 +212,7 @@ async def process_image(
         # for each input face of the photo
 
         # print("result", result)
+        logger.info("Processing completed successfully")
         return JSONResponse(
             content={
                 "recognition": recognized_criminals,
@@ -216,10 +221,13 @@ async def process_image(
             status_code=200,
         )
     except IOError as e:
+        logger.error(f"File error: {str(e)}")
         return JSONResponse(content={"error": f"File error: {str(e)}"}, status_code=400)
     except ValueError as e:
+        logger.error(f"Data error: {str(e)}")
         return JSONResponse(content={"error": f"Data error: {str(e)}"}, status_code=400)
     except RuntimeError as e:
+        logger.error(f"Model error: {str(e)}")
         return JSONResponse(
             content={"error": f"Model error: {str(e)}"}, status_code=500
         )
