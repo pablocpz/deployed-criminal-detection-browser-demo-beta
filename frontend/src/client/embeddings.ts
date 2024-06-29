@@ -10,6 +10,7 @@ export async function getRecognitionsFromAPI(
   imageData: ImageData,
   setProgress: (progress: number) => void,
   confidence_threshold: number,
+  retries = 3
 ): Promise<{
   recognitionResults: string[];
   recognitionSimilarities: number[];
@@ -56,7 +57,11 @@ export async function getRecognitionsFromAPI(
     };
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error('Axios error:', error.response?.data || error.message);
+      if (error.response?.status === 504 && retries > 0) {
+        console.log(`Retrying... Attempts left: ${retries - 1}`);
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds before retrying
+        return getRecognitionsFromAPI(imageData, setProgress, confidence_threshold, retries - 1);
+      }
       if (error.response?.status === 502) {
         throw new Error("The server is currently busy. Please try again in a few moments.");
       } else {
