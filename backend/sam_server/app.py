@@ -88,6 +88,19 @@ app.mount(
 # sam_encoder.to(device)
 
 
+# Check permissions
+required_dirs = [CRIMINAL_DATA_DIR, SAMPLE_IMAGES_DIR]
+for dir_path in required_dirs:
+    if not os.access(dir_path, os.R_OK | os.W_OK | os.X_OK):
+        logger.error(f"Insufficient permissions for directory: {dir_path}")
+        raise PermissionError(f"Insufficient permissions for directory: {dir_path}")
+
+required_file = '/var/www/deployed-criminal-detection-browser-demo-beta/backend/criminal_data/ds_model_vggface_detector_opencv_unaligned_normalization_base_expand_0.pkl'
+if not os.access(required_file, os.R_OK):
+    logger.error(f"Insufficient permissions for file: {required_file}")
+    raise PermissionError(f"Insufficient permissions for file: {required_file}")
+
+
 @app.post("/process-image/")
 async def process_image(
     file: UploadFile = File(...), confidence_threshold: float = 0.5
