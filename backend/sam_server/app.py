@@ -186,30 +186,22 @@ async def process_image(
         # each dataframe has a property for the path to the criminal they think the input belongs
         # along with the euclidean L2 similarity and it's threshold (if value < threshold, = face)
 
-        # we'll try first just getting the minimum distance without validating threshold nor
-        # converting it to an interpretable confidence value
+        recognized_criminals = []
+        recognized_similarities = []
 
-        recognized_criminals = [
-            result.identity[0].split("\\")[-2] if len(result) > 0 else " "
-            for result in recognition_results
-            # if result.distance[0] < result.threshold[0]
-        ]
+        for result in recognition_results:
+            if len(result) > 0 and not result.empty:
+                identity = result.identity.iloc[0] if 'identity' in result.columns else ''
+                criminal_name = identity.split("\\")[-2] if "\\" in identity else identity
+                recognized_criminals.append(criminal_name)
+                
+                distance = result.distance.iloc[0] if 'distance' in result.columns else 1.0
+                similarity = ((distance + 1) / 2) if distance != " " else 1.0
+                recognized_similarities.append(similarity)
+            else:
+                recognized_criminals.append(" ")
+                recognized_similarities.append(1.0)
 
-        recognized_similarities = [
-            result.distance[0] if len(result) > 0 else " "
-            for result in recognition_results
-        ]
-
-        recognized_similarities = [
-            ((val + 1) / 2) if val != " " else " " for val in recognized_similarities
-        ]
-        # the model already gives the criminal occurrence with biggest probability of
-        # being that criminal, so we don't need to check if it's above threshold
-
-        # we return the list of recognized criminals e.g ["Mbappe", "Fernan"..etc]
-        # for each input face of the photo
-
-        # print("result", result)
         logger.info("Processing completed successfully")
         return JSONResponse(
             content={
@@ -218,6 +210,9 @@ async def process_image(
             },
             status_code=200,
         )
+    except Exception as e:
+        logger.error(f"Error processing image: {str(e)}")
+        return JSONResponse(content={"error": f"Error processing image: {str(e)}"}, status_code=500)
     except IOError as e:
         logger.error(f"File error: {str(e)}")
         return JSONResponse(content={"error": f"File error: {str(e)}"}, status_code=400)
