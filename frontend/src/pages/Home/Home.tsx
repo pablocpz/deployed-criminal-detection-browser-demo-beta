@@ -262,7 +262,7 @@ const Home = () => {
                 onClick={() => navigate("/criminals-grid")}
                 className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300"
               >
-                View Criminals
+                View Criminals Database
               </button>
             </div>
           )}
