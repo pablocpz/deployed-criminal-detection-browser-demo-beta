@@ -25,18 +25,22 @@ const Home = () => {
   const [mode, setMode] = useState<"image" | "video">("image");
   const [images, setImages] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [imagesLoadingProgress, setImagesLoadingProgress] = useState(0);
 
   useEffect(() => {
     console.log("Fetching images...");
+    setImagesLoadingProgress(0);
     fetch(`${API_BASE_URL}/get-images/`, { credentials: 'include' })
       .then(response => {
         console.log("Images response received:", response.status);
+        setImagesLoadingProgress(50);
         return response.json();
       })
       .then(data => {
         console.log("Images data received:", data);
         if (data.images) {
           setImages(data.images);
+          setImagesLoadingProgress(100);
         } else {
           setError('Failed to load images');
         }
@@ -44,6 +48,7 @@ const Home = () => {
       .catch(error => {
         console.error('Error fetching images:', error);
         setError(`Error fetching images: ${error instanceof Error ? error.message : String(error)}`);
+        setImagesLoadingProgress(0);
       });
   }, []);
 
@@ -194,7 +199,7 @@ const Home = () => {
     <div className="w-full flex flex-col items-center">
       <div className="w-full max-w-6xl space-y-8">
         <p className="text-lg text-center">
-          <em>This is a BETA</em> 🚀
+          <em>Note: This is a BETA</em> 🚀
           <span>Reach me out on <a href="https://twitter.com/pablocpz_ai" target="_blank" rel="noopener noreferrer">Twitter</a> or <a href="https://www.linkedin.com/in/pablo-cobo-b46a8128b/" target="_blank" rel="noopener noreferrer">LinkedIn</a></span>
         </p>
         <p className="text-lg text-center">
@@ -202,6 +207,14 @@ const Home = () => {
         </p>
 
         <div className="container mx-auto px-4 max-w-6xl">
+          {imagesLoadingProgress < 100 && (
+            <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden mb-4">
+              <div 
+                className="h-full bg-blue-500 transition-all duration-300 ease-out"
+                style={{ width: `${imagesLoadingProgress}%` }}
+              ></div>
+            </div>
+          )}
           {error ? (
             <p className="text-red-500 text-center">{error}</p>
           ) : (
