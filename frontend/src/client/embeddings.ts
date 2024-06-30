@@ -57,12 +57,13 @@ export async function getRecognitionsFromAPI(
     };
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      if (error.response?.status === 504 && retries > 0) {
+      if (error.response?.status === 500) {
+        throw new Error("Server encountered an error. Please try again or contact support if the issue persists.");
+      } else if (error.response?.status === 504 && retries > 0) {
         console.log(`Retrying... Attempts left: ${retries - 1}`);
         await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds before retrying
         return getRecognitionsFromAPI(imageData, setProgress, confidence_threshold, retries - 1);
-      }
-      if (error.response?.status === 502) {
+      } else if (error.response?.status === 502) {
         throw new Error("The server is currently busy. Please try again in a few moments.");
       } else {
         throw new Error(`Server error: ${error.response?.status}. Please try again later.`);

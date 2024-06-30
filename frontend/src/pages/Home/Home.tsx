@@ -86,6 +86,8 @@ const Home = () => {
           });
         } catch (error) {
           console.error("Error in loadAndDetect:", error);
+          setError(`Error detecting criminals: ${error instanceof Error ? error.message : String(error)}`);
+          setProgress(0);
         } finally {
           setLoading(false);
         }
@@ -158,6 +160,7 @@ const Home = () => {
     if (file) {
       setLoading(true);
       setProgress(0);
+      setError(null); // Clear any previous errors
 
       try {
         const imageData = await urlToImageData(URL.createObjectURL(file));
@@ -179,6 +182,7 @@ const Home = () => {
         });
       } catch (error) {
         console.error("Error uploading and processing image:", error);
+        setError(`Error processing image: ${error instanceof Error ? error.message : String(error)}`);
       } finally {
         setLoading(false);
       }
