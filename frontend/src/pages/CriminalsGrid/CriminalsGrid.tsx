@@ -12,29 +12,12 @@ const CriminalsGrid = () => {
   useEffect(() => {
     fetch(`${API_BASE_URL}/list-criminals/`)
       .then(response => response.json())
-      .then(data => {
-        const criminalsWithImages = data.map(async (criminal: Criminal) => {
-          const images = await fetchCriminalImages(criminal.name);
-          return { ...criminal, images };
-        });
-        Promise.all(criminalsWithImages).then(setCriminals);
-      })
+      .then(data => setCriminals(data))
       .catch(error => {
         console.error('Error fetching criminals:', error);
         setError('Error fetching criminals');
       });
   }, []);
-
-  const fetchCriminalImages = async (criminalName: string) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/criminal-images/${criminalName}`);
-      const data = await response.json();
-      return data.images || [];
-    } catch (error) {
-      console.error('Error fetching images for', criminalName, ':', error);
-      return [];
-    }
-  };
 
   return (
     <div className="criminals-grid-container">
@@ -47,19 +30,16 @@ const CriminalsGrid = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {criminals.map((criminal, index) => (
             <div key={index} className="criminal-card">
-              <h2 className="text-xl font-semibold text-center">
+              <h2 className="text-xl font-semibold text-center mb-2">
                 {criminal.name}
               </h2>
-              <div className="grid">
+              <div className="image-grid">
                 {criminal.images.map((image, imgIndex) => (
-                  <div
-                    key={imgIndex}
-                    className="aspect-square overflow-hidden rounded-lg relative"
-                  >
+                  <div key={imgIndex} className="image-container">
                     <img
                       src={image}
                       alt={`Criminal ${criminal.name}`}
-                      className="criminal-image w-full h-full object-cover"
+                      className="criminal-image"
                     />
                   </div>
                 ))}
@@ -70,7 +50,7 @@ const CriminalsGrid = () => {
       )}
       <button
         onClick={() => navigate("/")}
-        className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out"
+        className="mt-6 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out"
       >
         Back to Home
       </button>

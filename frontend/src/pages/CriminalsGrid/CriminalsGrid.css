@@ -10,30 +10,26 @@
   padding: 16px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin: 10px; /* Add margin to separate the cards */
 }
 
 .criminal-card h2 {
   margin-bottom: 8px;
 }
 
-.criminal-image {
-  width: 100%; /* Ensure the image takes the full width of the container */
-  height: auto; /* Maintain aspect ratio */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+}
+
+.image-container {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
   border-radius: 4px;
 }
 
-.aspect-square {
-  width: 150px; /* Set a fixed width */
-  height: 150px; /* Set a fixed height */
-  overflow: hidden;
-  border-radius: 8px;
-  position: relative;
-  margin: 5px; /* Add margin to separate the images */
-}
-
-.grid {
-  display: flex;
-  flex-wrap: wrap; /* Allow the images to wrap to the next line */
-  justify-content: center; /* Center the images */
+.criminal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
