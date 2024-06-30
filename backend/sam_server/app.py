@@ -212,7 +212,7 @@ async def process_image(
                 recognized_criminals.append(criminal_name)
                 
                 distance = result.distance.iloc[0] if 'distance' in result.columns else 1.0
-                similarity = ((1 - distance) * 100) if distance != " " else 0.0
+                similarity = ((distance+1) / 2) if distance != " " else 0.0
                 recognized_similarities.append(round(similarity, 3))
             else:
                 recognized_criminals.append(" ")
