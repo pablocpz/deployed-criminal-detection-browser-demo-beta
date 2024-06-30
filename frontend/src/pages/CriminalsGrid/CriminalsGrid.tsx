@@ -10,13 +10,22 @@ const CriminalsGrid = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/list-criminals/`)
-      .then(response => response.json())
-      .then(data => setCriminals(data))
-      .catch(error => {
-        console.error('Error fetching criminals:', error);
-        setError('Error fetching criminals');
-      });
+    const fetchCriminals = async () => {
+      try {
+        console.log("Fetching criminals...");
+        const response = await fetch(`${API_BASE_URL}/list-criminals/`, {
+          credentials: 'include'
+        });
+        const data = await response.json();
+        console.log("Fetched criminals:", data);
+        setCriminals(data);
+      } catch (error) {
+        console.error("Error fetching criminals:", error);
+        setError("Error fetching criminals");
+      }
+    };
+
+    fetchCriminals();
   }, []);
 
   return (
@@ -37,7 +46,7 @@ const CriminalsGrid = () => {
                 {criminal.images.map((image, imgIndex) => (
                   <div key={imgIndex} className="image-container">
                     <img
-                      src={image}
+                      src={`${API_BASE_URL}${image}`}
                       alt={`Criminal ${criminal.name}`}
                       className="criminal-image"
                     />

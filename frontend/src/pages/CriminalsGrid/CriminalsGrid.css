@@ -1,35 +1,69 @@
 .criminals-grid-container {
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   padding: 20px;
+
 }
+
+
 
 .criminal-card {
+
   background-color: #2d2d2d;
+
   padding: 16px;
+
   border-radius: 8px;
+
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
 }
+
+
 
 .criminal-card h2 {
+
   margin-bottom: 8px;
+
 }
+
+
 
 .image-grid {
+
   display: grid;
+
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+
   gap: 8px;
+
 }
+
+
 
 .image-container {
+
   aspect-ratio: 1 / 1;
+
   overflow: hidden;
+
   border-radius: 4px;
+
 }
 
+
+
 .criminal-image {
+
   width: 100%;
+
   height: 100%;
+
   object-fit: cover;
+
 }
