@@ -13,6 +13,7 @@ const Results = () => {
   };
 
   return (
+    
     <div className="w-full flex flex-col items-center">
       <div className="w-full max-w-4xl space-y-8">
         <h1 className="text-3xl font-bold text-white text-center">
