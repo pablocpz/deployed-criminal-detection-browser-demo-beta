@@ -194,7 +194,8 @@ const Home = () => {
     <div className="w-full flex flex-col items-center">
       <div className="w-full max-w-6xl space-y-8">
         <p className="text-lg text-center">
-          <strong>This is a BETA</strong> 🚀
+          <em>This is a BETA</em> 🚀
+          <span>Reach me out on <a href="https://twitter.com/pablocpz_ai" target="_blank" rel="noopener noreferrer">Twitter</a> or <a href="https://www.linkedin.com/in/pablo-cobo-b46a8128b/" target="_blank" rel="noopener noreferrer">LinkedIn</a></span>
         </p>
         <p className="text-lg text-center">
           Select an image to detect criminals.
