@@ -31,7 +31,7 @@ const CriminalsGrid = () => {
   return (
     <div className="criminals-grid-container">
       <h1 className="text-3xl font-bold text-white text-center mb-6">
-        Criminals
+        Stored Criminals <em>(Sample Database) 📚</em>
       </h1>
       {error ? (
         <p className="text-red-500 text-center">{error}</p>

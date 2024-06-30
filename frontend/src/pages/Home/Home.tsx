@@ -269,24 +269,31 @@ const Home = () => {
         </div>
 
         <div className="bg-gray-800 rounded-xl p-6 shadow-lg">
-          <label className="flex items-center justify-center space-x-3 cursor-pointer">
-            <span className="text-sm font-medium text-gray-300">Image</span>
-            <div className="relative">
-              <input
-                type="checkbox"
-                className="sr-only"
-                checked={mode === "video"}
-                onChange={() => setMode(mode === "image" ? "video" : "image")}
-              />
-              <div
-                className={`block w-14 h-8 rounded-full transition ${mode === "video" ? "bg-green-400" : "bg-gray-600"}`}
-              ></div>
-              <div
-                className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${mode === "video" ? "transform translate-x-6" : ""}`}
-              ></div>
-            </div>
-            <span className="text-sm font-medium text-gray-300">Video</span>
-          </label>
+          <div className="flex items-center justify-center space-x-3">
+            <label className="flex items-center justify-center space-x-3 cursor-pointer">
+              <span className="text-sm font-medium text-gray-300">Image</span>
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={mode === "video"}
+                  onChange={() => setMode(mode === "image" ? "video" : "image")}
+                />
+                <div
+                  className={`block w-14 h-8 rounded-full transition ${mode === "video" ? "bg-green-400" : "bg-gray-600"}`}
+                ></div>
+                <div
+                  className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${mode === "video" ? "transform translate-x-6" : ""}`}
+                ></div>
+              </div>
+              <span className="text-sm font-medium text-gray-300">Video</span>
+            </label>
+            {mode === "video" && (
+              <span className="text-xs italic text-red-500 ml-2">
+                Coming soon on the local version... 🚀
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="bg-gray-800 rounded-xl p-6 shadow-lg">
