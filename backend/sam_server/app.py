@@ -61,10 +61,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://deployed-criminal-detection-v5.vercel.app",
-        "https://browser-demo-beta.xyz"
-    ],
+    allow_origins=["https://deployed-criminal-detection-v5.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

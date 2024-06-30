@@ -28,7 +28,7 @@ const Home = () => {
 
   useEffect(() => {
     console.log("Fetching images...");
-    fetch(`${API_BASE_URL}/get-images/`)
+    fetch(`${API_BASE_URL}/get-images/`, { credentials: 'include' })
       .then(response => {
         console.log("Images response received:", response.status);
         return response.json();
@@ -49,9 +49,7 @@ const Home = () => {
 
   useEffect(() => {
     console.log("Fetching criminals...");
-    fetch(`${API_BASE_URL}/list-criminals/`, {
-      // credentials: 'include'
-    })
+    fetch(`${API_BASE_URL}/list-criminals/`, { credentials: 'include' })
       .then(response => {
         console.log("Criminals response received:", response.status);
         return response.json();
