@@ -207,6 +207,10 @@ async def process_image(
 
         for result in recognition_results:
             if len(result) > 0 and not result.empty:
+                
+                print(result)
+                
+                
                 identity = result.identity.iloc[0] if 'identity' in result.columns else ''
                 criminal_name = identity.split("/")[-2] if "/" in identity else identity
                 recognized_criminals.append(criminal_name)
