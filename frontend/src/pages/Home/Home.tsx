@@ -26,6 +26,7 @@ const Home = () => {
   const [images, setImages] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [imagesLoadingProgress, setImagesLoadingProgress] = useState(0);
+  const [localImageLoadingProgress, setLocalImageLoadingProgress] = useState(0);
 
   useEffect(() => {
     console.log("Fetching images...");
@@ -165,12 +166,15 @@ const Home = () => {
     if (file) {
       setLoading(true);
       setProgress(0);
-      setError(null); // Clear any previous errors
+      setError(null);
+      setLocalImageLoadingProgress(0);
 
       try {
+        setLocalImageLoadingProgress(25);
         const imageData = await urlToImageData(URL.createObjectURL(file));
         setUploadedImageData(imageData);
         setUploadedImageUrl(URL.createObjectURL(file));
+        setLocalImageLoadingProgress(50);
 
         const detected_criminals = await detect(
           imageData,
@@ -178,6 +182,7 @@ const Home = () => {
           confidenceThreshold,
         );
         setDetectedObjects(detected_criminals);
+        setLocalImageLoadingProgress(100);
         navigate("/results", {
           state: {
             detected_criminals,
@@ -188,6 +193,7 @@ const Home = () => {
       } catch (error) {
         console.error("Error uploading and processing image:", error);
         setError(`Error processing image: ${error instanceof Error ? error.message : String(error)}`);
+        setLocalImageLoadingProgress(0);
       } finally {
         setLoading(false);
       }
@@ -205,7 +211,14 @@ const Home = () => {
         <p className="text-lg text-center">
           Select an image to detect criminals.
         </p>
-
+        {localImageLoadingProgress > 0 && localImageLoadingProgress < 100 && (
+          <div className="w-full max-w-md h-1 bg-gray-200 rounded-full overflow-hidden mt-2">
+            <div 
+              className="h-full bg-blue-500 transition-all duration-300 ease-out"
+              style={{ width: `${localImageLoadingProgress}%` }}
+            ></div>
+          </div>
+        )}
         <div className="container mx-auto px-4 max-w-6xl">
           {imagesLoadingProgress < 100 && (
             <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden mb-4">
