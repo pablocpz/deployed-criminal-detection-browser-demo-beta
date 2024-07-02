@@ -137,7 +137,7 @@ async def process_image(
         )
         logger.info(f"Extracted {len(face_objs)} faces")
 
-        print("this", face_objs)
+        # print("f", face_objs)
         # returns a list of dictionaries, each one with face pixels, confidence, width. height...etc
 
         detected_faces = [
